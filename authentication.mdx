@@ -1,0 +1,80 @@
+---
+title: 'Authentication'
+description: 'Learn how to authenticate with the API using bearer tokens and API keys'
+---
+
+## Overview
+
+All API requests require authentication. You can authenticate using either bearer tokens or API keys depending on your use case.
+
+## Authentication Methods
+
+### Bearer Token Authentication
+
+For most API requests, use bearer token authentication by including your token in the Authorization header:
+
+```bash
+curl -X GET "https://api.example.com/v1/endpoint" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
+
+### API Key Authentication
+
+Alternatively, you can authenticate using API keys by including your key in the request header:
+
+```bash
+curl -X GET "https://api.example.com/v1/endpoint" \
+  -H "X-API-Key: YOUR_API_KEY_HERE"
+```
+
+## Getting Your Credentials
+
+### Obtaining a Bearer Token
+
+1. Log in to your dashboard
+2. Navigate to the API section
+3. Generate a new bearer token
+4. Copy and securely store your token
+
+<Warning>
+Bearer tokens expire after 24 hours. You'll need to refresh them regularly for long-running applications.
+</Warning>
+
+### Obtaining an API Key
+
+1. Go to your account settings
+2. Select "API Keys" from the menu
+3. Click "Create New API Key"
+4. Name your key and set appropriate permissions
+5. Copy and securely store your API key
+
+<Tip>
+API keys don't expire but can be revoked at any time from your dashboard.
+</Tip>
+
+## Security Best Practices
+
+- **Never expose credentials in client-side code** - Keep your tokens and API keys on your server
+- **Use environment variables** - Store credentials as environment variables, not in your codebase
+- **Rotate credentials regularly** - Generate new credentials periodically and revoke old ones
+- **Use HTTPS only** - Always make requests over HTTPS to protect your credentials in transit
+- **Implement proper error handling** - Don't log or expose credentials in error messages
+
+## Authentication Errors
+
+If authentication fails, you'll receive a `401 Unauthorized` response:
+
+```json
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid or missing authentication credentials"
+  }
+}
+```
+
+Common authentication issues:
+- Missing Authorization header
+- Expired bearer token
+- Invalid API key
+- Insufficient permissions for the requested resource

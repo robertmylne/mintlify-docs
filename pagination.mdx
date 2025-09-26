@@ -1,0 +1,185 @@
+---
+title: 'Pagination'
+description: 'How to navigate through large datasets using pagination'
+---
+
+<Note>
+**TODO: Decision needed** - Determine whether to implement normal pagination (offset/limit) or cursor-based pagination for this API. This decision will affect the examples and parameters shown below.
+</Note>
+
+## Overview
+
+When working with large datasets, the API uses pagination to break results into manageable chunks. This improves performance and reduces response times.
+
+## Pagination Parameters
+
+### Offset-Based Pagination (Traditional)
+
+Use `limit` and `offset` parameters to control pagination:
+
+```bash
+GET /api/v1/users?limit=20&offset=40
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | integer | 20 | Number of items to return (max 100) |
+| `offset` | integer | 0 | Number of items to skip |
+
+### Cursor-Based Pagination (Alternative)
+
+Use `limit` and `cursor` parameters for more efficient pagination:
+
+```bash
+GET /api/v1/users?limit=20&cursor=eyJpZCI6MTIzfQ==
+```
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | integer | 20 | Number of items to return (max 100) |
+| `cursor` | string | null | Encoded cursor for pagination |
+
+## Response Format
+
+### Offset-Based Response
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "offset": 40,
+    "total": 1250,
+    "has_more": true
+  }
+}
+```
+
+### Cursor-Based Response
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  ],
+  "pagination": {
+    "limit": 20,
+    "next_cursor": "eyJpZCI6MjB9",
+    "prev_cursor": "eyJpZCI6MX0=",
+    "has_more": true
+  }
+}
+```
+
+## Pagination Limits
+
+- **Maximum limit**: 100 items per request
+- **Default limit**: 20 items per request
+- **Minimum limit**: 1 item per request
+
+<Warning>
+Requesting more than 100 items will result in a validation error.
+</Warning>
+
+## Best Practices
+
+### Efficient Pagination
+
+```javascript
+// Offset-based pagination example
+async function getAllUsers() {
+  const allUsers = [];
+  let offset = 0;
+  const limit = 50;
+
+  while (true) {
+    const response = await fetch(`/api/v1/users?limit=${limit}&offset=${offset}`);
+    const data = await response.json();
+
+    allUsers.push(...data.data);
+
+    if (!data.pagination.has_more) {
+      break;
+    }
+
+    offset += limit;
+  }
+
+  return allUsers;
+}
+
+// Cursor-based pagination example
+async function getAllUsersWithCursor() {
+  const allUsers = [];
+  let cursor = null;
+  const limit = 50;
+
+  while (true) {
+    const url = cursor
+      ? `/api/v1/users?limit=${limit}&cursor=${cursor}`
+      : `/api/v1/users?limit=${limit}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    allUsers.push(...data.data);
+
+    if (!data.pagination.has_more) {
+      break;
+    }
+
+    cursor = data.pagination.next_cursor;
+  }
+
+  return allUsers;
+}
+```
+
+### Performance Considerations
+
+- **Use smaller page sizes** for faster response times
+- **Cache results** when possible to avoid repeated requests
+- **Handle rate limits** by implementing appropriate delays between requests
+- **Consider cursor pagination** for large datasets to avoid consistency issues
+
+## Error Handling
+
+### Invalid Pagination Parameters
+
+```json
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Invalid pagination parameters",
+    "details": {
+      "limit": "Limit must be between 1 and 100",
+      "offset": "Offset must be a non-negative integer"
+    }
+  }
+}
+```
+
+### Cursor Errors
+
+```json
+{
+  "error": {
+    "code": "invalid_cursor",
+    "message": "The provided cursor is invalid or expired"
+  }
+}
+```
+
+<Tip>
+When implementing pagination in your application, always check the `has_more` field to determine if there are additional pages available.
+</Tip>

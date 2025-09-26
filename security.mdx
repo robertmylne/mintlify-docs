@@ -1,0 +1,239 @@
+---
+title: 'Security'
+description: 'Security requirements and best practices for using the API'
+---
+
+## HTTPS Requirement
+
+<Warning>
+**HTTPS Only**: All API requests must be made over HTTPS. HTTP requests will be rejected with a `400 Bad Request` error.
+</Warning>
+
+The API enforces HTTPS for all communications to ensure:
+- **Data encryption** in transit
+- **Authentication token protection**
+- **Request and response integrity**
+- **Protection against man-in-the-middle attacks**
+
+## TLS Requirements
+
+### Supported TLS Versions
+
+| Version | Support Status |
+|---------|----------------|
+| TLS 1.3 | ✅ Recommended |
+| TLS 1.2 | ✅ Supported |
+| TLS 1.1 | ❌ Deprecated |
+| TLS 1.0 | ❌ Not Supported |
+
+### Certificate Validation
+
+Always verify SSL certificates when making API requests:
+
+```javascript
+// Node.js example - DO NOT disable certificate validation
+const https = require('https');
+
+// ❌ NEVER do this in production
+const agent = new https.Agent({
+  rejectUnauthorized: false // DON'T DO THIS
+});
+
+// ✅ Proper certificate validation (default behavior)
+fetch('https://api.example.com/v1/users', {
+  // Certificate validation is enabled by default
+});
+```
+
+## Security Headers
+
+The API returns several security headers that clients should respect:
+
+### Response Headers
+
+```http
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Content-Security-Policy: default-src 'none'
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+```
+
+### Request Headers
+
+Include these headers in your requests for enhanced security:
+
+```bash
+curl -X GET "https://api.example.com/v1/users" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "User-Agent: YourApp/1.0" \
+  -H "Accept: application/json"
+```
+
+## Authentication Security
+
+### Token Storage
+
+- **Server-side storage**: Store tokens securely on your backend
+- **Environment variables**: Use environment variables, not hardcoded values
+- **Avoid client-side storage**: Never store tokens in browsers or mobile app storage
+
+```javascript
+// ✅ Good: Server-side environment variable
+const apiToken = process.env.API_TOKEN;
+
+// ❌ Bad: Hardcoded in client-side code
+const apiToken = "sk_live_abcd1234..."; // NEVER DO THIS
+```
+
+### Token Transmission
+
+```javascript
+// ✅ Correct: Authorization header
+const response = await fetch('https://api.example.com/v1/users', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+});
+
+// ❌ Incorrect: Token in URL or body
+const response = await fetch(`https://api.example.com/v1/users?token=${token}`);
+```
+
+## IP Allowlisting
+
+For enhanced security, you can configure IP allowlists for your API keys:
+
+1. Log in to your dashboard
+2. Navigate to API Settings
+3. Configure allowed IP addresses or CIDR ranges
+4. Save your configuration
+
+```json
+{
+  "allowed_ips": [
+    "203.0.113.0/24",
+    "198.51.100.42"
+  ]
+}
+```
+
+## Request Validation
+
+### Input Sanitization
+
+The API automatically validates and sanitizes all inputs, but follow these best practices:
+
+- **Validate data** before sending requests
+- **Use parameterized queries** when constructing filter parameters
+- **Escape special characters** in string inputs
+- **Limit input sizes** to reasonable values
+
+```javascript
+// ✅ Good: Validate and sanitize inputs
+function sanitizeSearchQuery(query) {
+  return query
+    .trim()
+    .replace(/[<>]/g, '') // Remove dangerous characters
+    .substring(0, 100); // Limit length
+}
+
+const searchQuery = sanitizeSearchQuery(userInput);
+```
+
+### Content Type Validation
+
+Always specify the correct `Content-Type` header:
+
+```bash
+# For JSON requests
+curl -X POST "https://api.example.com/v1/users" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"name": "John Doe"}'
+```
+
+## Error Responses for Security Violations
+
+### HTTPS Required
+
+```json
+{
+  "error": {
+    "code": "https_required",
+    "message": "HTTPS is required for all API requests"
+  }
+}
+```
+
+### Invalid Certificate
+
+When your client cannot verify the SSL certificate:
+
+```json
+{
+  "error": {
+    "code": "ssl_verification_failed",
+    "message": "SSL certificate verification failed"
+  }
+}
+```
+
+### IP Restriction
+
+```json
+{
+  "error": {
+    "code": "ip_not_allowed",
+    "message": "Request from this IP address is not permitted"
+  }
+}
+```
+
+## Security Best Practices
+
+### Development
+
+- **Use HTTPS in all environments** including development and staging
+- **Store secrets securely** using proper secret management tools
+- **Rotate credentials regularly**
+- **Monitor API usage** for unusual patterns
+- **Log security events** but never log sensitive data
+
+### Production Checklist
+
+- [ ] All requests use HTTPS
+- [ ] SSL certificate validation enabled
+- [ ] API tokens stored securely (environment variables)
+- [ ] IP allowlisting configured (if applicable)
+- [ ] Rate limiting implemented
+- [ ] Request/response logging configured (without sensitive data)
+- [ ] Error handling doesn't expose internal information
+- [ ] Security headers properly handled
+
+### Monitoring
+
+Monitor your API usage for potential security issues:
+
+- **Unusual traffic patterns**
+- **Failed authentication attempts**
+- **Requests from unexpected IP addresses**
+- **Abnormal error rates**
+
+<Note>
+Review our [Rate Limits](/api-reference/rate-limits) documentation for information about protecting against abuse and implementing proper request throttling.
+</Note>
+
+## Vulnerability Reporting
+
+If you discover a security vulnerability:
+
+1. **DO NOT** disclose it publicly
+2. Email security@example.com with details
+3. Include steps to reproduce the issue
+4. We'll respond within 24 hours
+
+<Tip>
+Enable security notifications in your dashboard to receive alerts about important security updates and maintenance windows.
+</Tip>
