@@ -1,33 +1,37 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'Overview of the Caspen API and how to begin integrating'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Welcome to the Caspen API
 
-## Welcome
+Caspen streamlines your allied health practice so you can focus on what matters most - your patients. Our comprehensive platform handles everything from client scheduling and treatment notes to billing and compliance, giving allied health practitioners the tools they need to run their practice efficiently.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+The Caspen API extends your capabilities even further, allowing you to integrate with your existing tools, automate repetitive tasks, and create custom solutions tailored to your unique practice needs. Whether you're syncing patient data with specialized equipment, connecting to accounting software, or building custom reporting dashboards, our API makes it possible.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+## Protocol and formats
 
-## Authentication
+Caspen exposes REST-style endpoints that use resource-oriented URLs, expect JSON payloads, and return JSON responses, protected by secure TLS 1.2+ encryption and robust bearer-token authentication.
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+## Base URL
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+Use this production endpoint for all Caspen API requests.
+
+```plaintext
+https://api.caspen.com/v1
 ```
+
+## What you can build
+
+- **Integrate internal systems** by syncing clients, appointments, and billing data.
+- **Power custom applications** that rely on Caspen as the single source of truth.
+- **Automate operational tasks** such as onboarding, reporting, and notifications.
+
+
+## Next steps
+
+- Review [Authentication](authentication) to generate and manage bearer tokens.
+- Read [Security](security) before deploying production integrations.
+- Study [Rate Limits](rate-limits) and [Dates and Times](dates-times) so your integration handles throttling and timezones correctly.
+
+

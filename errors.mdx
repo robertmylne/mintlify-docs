@@ -1,179 +1,40 @@
 ---
 title: 'Errors'
-description: 'Understanding API error responses and how to handle them'
+description: 'Understand how the Caspen API reports problems and the status codes you might encounter'
 ---
 
 ## Overview
 
-The API uses conventional HTTP response codes to indicate the success or failure of an API request. In general:
-- Codes in the `2xx` range indicate success
-- Codes in the `4xx` range indicate an error with the request
-- Codes in the `5xx` range indicate an error with our servers
+Caspen uses conventional HTTP status codes to describe request outcomes:
+- Codes in the `2xx` range indicate success.
+- Codes in the `4xx` range indicate an issue with the request.
+- Codes in the `5xx` range indicate a server-side problem.
 
-## Error Response Format
+HTTP status codes communicate the category of the problem, and the JSON body provides the platform-formatted message (with field-level errors when validation fails).
 
-All errors return a consistent JSON structure:
-
-```json
-{
-  "error": {
-    "code": "error_code",
-    "message": "Human-readable error message",
-    "details": {
-      "field": "Additional context about the error"
-    }
-  }
-}
-```
-
-## HTTP Status Codes
+## HTTP status codes
 
 ### 2xx - Success
 | Code | Status | Description |
 |------|--------|-------------|
-| `200` | OK | The request was successful |
-| `201` | Created | The resource was successfully created |
-| `204` | No Content | The request was successful with no response body |
+| `200` | OK | The request succeeded |
+| `201` | Created | A new resource was created |
+| `204` | No Content | The operation succeeded and returns no body |
 
-### 4xx - Client Errors
+### 4xx - Client errors
 | Code | Status | Description |
 |------|--------|-------------|
-| `400` | Bad Request | The request was invalid or cannot be served |
-| `401` | Unauthorized | Authentication credentials are missing or invalid |
-| `403` | Forbidden | The request is valid but not allowed for this user |
-| `404` | Not Found | The requested resource could not be found |
-| `409` | Conflict | The request conflicts with the current state |
-| `422` | Unprocessable Entity | The request was well-formed but contains semantic errors |
-| `429` | Too Many Requests | You have exceeded the rate limit |
+| `400` | Bad Request | The request cannot be processed (generic client error) |
+| `401` | Unauthorized | Missing or invalid bearer token |
+| `403` | Forbidden | Authenticated but not allowed to perform this action |
+| `404` | Not Found | The requested resource does not exist |
+| `409` | Conflict | The request conflicts with the current resource state |
+| `422` | Unprocessable Entity | Validation failed; see the `errors` object for details |
+| `429` | Too Many Requests | Rate limit exceeded |
 
-### 5xx - Server Errors
+### 5xx - Server errors
 | Code | Status | Description |
 |------|--------|-------------|
-| `500` | Internal Server Error | An unexpected error occurred on our servers |
-| `502` | Bad Gateway | Invalid response from an upstream server |
+| `500` | Internal Server Error | An unexpected error occurred |
+| `502` | Bad Gateway | Upstream dependency returned an invalid response |
 | `503` | Service Unavailable | The service is temporarily unavailable |
-
-## Common Error Types
-
-### Validation Errors (422)
-
-When your request contains invalid data, you'll receive a detailed validation error:
-
-```json
-{
-  "error": {
-    "code": "validation_error",
-    "message": "The request contains invalid data",
-    "details": {
-      "email": "Email address is required",
-      "age": "Age must be a positive integer"
-    }
-  }
-}
-```
-
-### Authentication Errors (401)
-
-```json
-{
-  "error": {
-    "code": "unauthorized",
-    "message": "Invalid or missing authentication credentials"
-  }
-}
-```
-
-### Rate Limit Errors (429)
-
-```json
-{
-  "error": {
-    "code": "rate_limit_exceeded",
-    "message": "Too many requests. Please try again later.",
-    "details": {
-      "retry_after": 60,
-      "limit": 1000,
-      "window": "1h"
-    }
-  }
-}
-```
-
-### Resource Not Found (404)
-
-```json
-{
-  "error": {
-    "code": "not_found",
-    "message": "The requested resource was not found",
-    "details": {
-      "resource": "user",
-      "id": "123"
-    }
-  }
-}
-```
-
-## Error Handling Best Practices
-
-### Retry Logic
-
-For `5xx` errors and `429` rate limit errors, implement exponential backoff:
-
-```javascript
-async function makeRequestWithRetry(url, options, maxRetries = 3) {
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.ok) {
-        return response;
-      }
-
-      // Don't retry client errors (4xx), except rate limits
-      if (response.status >= 400 && response.status < 500 && response.status !== 429) {
-        throw new Error(`Client error: ${response.status}`);
-      }
-
-      // Exponential backoff for server errors and rate limits
-      if (attempt < maxRetries) {
-        const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    } catch (error) {
-      if (attempt === maxRetries) throw error;
-    }
-  }
-}
-```
-
-### Graceful Degradation
-
-Always handle errors gracefully in your application:
-
-```javascript
-try {
-  const response = await api.getUser(userId);
-  displayUser(response.data);
-} catch (error) {
-  if (error.status === 404) {
-    showMessage("User not found");
-  } else if (error.status >= 500) {
-    showMessage("Service temporarily unavailable. Please try again later.");
-  } else {
-    showMessage("An error occurred. Please contact support.");
-  }
-}
-```
-
-## Getting Help
-
-If you encounter persistent `5xx` errors or believe you've found a bug:
-
-1. Check our [status page](https://status.example.com) for known issues
-2. Review your request format against this documentation
-3. Contact support with the full error response and request details
-
-<Note>
-Include the `X-Request-ID` header value from error responses when contacting support for faster troubleshooting.
-</Note>

@@ -31,11 +31,9 @@
           "authentication",
           "errors",
           "pagination",
-          "filtering",
           "security",
           "rate-limits",
-          "dates-times",
-          "sorting"
+          "dates-times"
         ]
       },
       {

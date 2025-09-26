@@ -1,6 +1,6 @@
 ---
 title: 'Dates and Times'
-description: 'How the API handles dates, times, and timezone data'
+description: 'How Caspen handles dates, times, and timezone data'
 ---
 
 ## UTC Requirement
@@ -16,285 +16,27 @@ description: 'How the API handles dates, times, and timezone data'
 All dates and times use the ISO 8601 format with UTC timezone:
 
 ```
-YYYY-MM-DDTHH:mm:ss.sssZ
+YYYY-MM-DDTHH:mm:ssZ
 ```
 
 **Examples:**
-- `2024-01-15T14:30:00.000Z` (with milliseconds)
-- `2024-01-15T14:30:00Z` (without milliseconds)
-- `2024-01-15T00:00:00Z` (date only, start of day)
+- `2024-01-15T14:30:00Z` (2:30 PM UTC)
+- `2024-01-15T00:00:00Z` (midnight UTC)
 
 ### Date-Only Format
 
-For date-only fields, use the date portion with time set to start of day:
+For fields that expect a calendar date, send the date string directly:
 
 ```
 YYYY-MM-DD
 ```
 
-This gets converted to: `YYYY-MM-DDTHH:mm:ss.sssZ` where the time is `00:00:00.000Z`
+Example: `2024-01-15`
 
-## API Response Format
 
-All datetime fields in API responses follow the same UTC format:
 
-```json
-{
-  "id": 123,
-  "name": "Example Record",
-  "created_at": "2024-01-15T14:30:00.000Z",
-  "updated_at": "2024-01-15T16:45:30.123Z",
-  "due_date": "2024-01-20T00:00:00.000Z",
-  "last_login": "2024-01-15T13:22:45.456Z"
-}
-```
 
-## Working with Dates
 
-### Converting to UTC
 
-Always convert local times to UTC before making API requests:
 
-```javascript
-// JavaScript examples
 
-// From local date to UTC ISO string
-const localDate = new Date('2024-01-15 14:30:00'); // Local time
-const utcString = localDate.toISOString(); // "2024-01-15T19:30:00.000Z" (if local was EST)
-
-// From specific timezone to UTC
-const moment = require('moment-timezone');
-const utcDate = moment.tz('2024-01-15 14:30:00', 'America/New_York').utc().toISOString();
-
-// Current timestamp in UTC
-const now = new Date().toISOString(); // "2024-01-15T19:30:00.123Z"
-```
-
-```python
-# Python examples
-from datetime import datetime, timezone
-import pytz
-
-# Current UTC time
-utc_now = datetime.now(timezone.utc).isoformat()
-
-# Convert from local timezone to UTC
-eastern = pytz.timezone('US/Eastern')
-local_time = eastern.localize(datetime(2024, 1, 15, 14, 30, 0))
-utc_time = local_time.astimezone(timezone.utc).isoformat()
-
-# Parse UTC string from API
-api_date = "2024-01-15T14:30:00.000Z"
-parsed_date = datetime.fromisoformat(api_date.replace('Z', '+00:00'))
-```
-
-### Displaying Dates to Users
-
-Convert UTC dates to local timezone for display:
-
-```javascript
-// JavaScript - Convert API response to local time
-function formatDateForUser(utcDateString) {
-  const date = new Date(utcDateString);
-
-  // Format for user's locale and timezone
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZoneName: 'short'
-  });
-}
-
-// Example usage
-const apiDate = "2024-01-15T14:30:00.000Z";
-const userFriendly = formatDateForUser(apiDate);
-// Output: "January 15, 2024 at 9:30 AM EST" (if user is in Eastern timezone)
-```
-
-## Common Date Operations
-
-### Date Filtering
-
-When filtering by dates, always use UTC:
-
-```bash
-# Get records created today (UTC)
-GET /api/v1/orders?created_at_gte=2024-01-15T00:00:00Z&created_at_lt=2024-01-16T00:00:00Z
-
-# Get records from last 24 hours
-GET /api/v1/users?last_login_gte=2024-01-14T14:30:00Z
-
-# Get records updated this month
-GET /api/v1/products?updated_at_gte=2024-01-01T00:00:00Z&updated_at_lt=2024-02-01T00:00:00Z
-```
-
-### Creating Records with Dates
-
-```bash
-# Creating a record with specific datetime
-curl -X POST "https://api.example.com/v1/events" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{
-    "title": "Meeting",
-    "start_time": "2024-01-20T15:00:00.000Z",
-    "end_time": "2024-01-20T16:00:00.000Z"
-  }'
-```
-
-### Updating Date Fields
-
-```bash
-# Update with new datetime
-curl -X PATCH "https://api.example.com/v1/tasks/123" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN" \
-  -d '{
-    "due_date": "2024-01-25T23:59:59.000Z",
-    "completed_at": "2024-01-15T14:30:00.000Z"
-  }'
-```
-
-## Date Validation
-
-### Valid Formats
-
-The API accepts these datetime formats:
-
-```json
-{
-  "examples": [
-    "2024-01-15T14:30:00.000Z",
-    "2024-01-15T14:30:00Z",
-    "2024-01-15T14:30:00.123Z",
-    "2024-01-15T14:30:00.12Z",
-    "2024-01-15T14:30:00.1Z"
-  ]
-}
-```
-
-### Invalid Formats
-
-These formats will result in validation errors:
-
-```json
-{
-  "invalid_examples": [
-    "2024-01-15",
-    "2024-01-15 14:30:00",
-    "2024-01-15T14:30:00",
-    "2024-01-15T14:30:00-05:00",
-    "2024-01-15T14:30:00+00:00",
-    "15/01/2024",
-    "Jan 15, 2024"
-  ]
-}
-```
-
-### Validation Error Response
-
-```json
-{
-  "error": {
-    "code": "validation_error",
-    "message": "Invalid date format",
-    "details": {
-      "start_date": "Date must be in ISO 8601 UTC format (YYYY-MM-DDTHH:mm:ss.sssZ)",
-      "due_date": "Invalid date format: '2024-01-15 14:30:00'"
-    }
-  }
-}
-```
-
-## Special Date Handling
-
-### Null Dates
-
-Some date fields may be nullable:
-
-```json
-{
-  "id": 123,
-  "created_at": "2024-01-15T14:30:00.000Z",
-  "completed_at": null,
-  "deleted_at": null
-}
-```
-
-### Date Ranges
-
-For date range queries, use start and end parameters:
-
-```bash
-# Records between two dates
-GET /api/v1/reports?start_date=2024-01-01T00:00:00Z&end_date=2024-01-31T23:59:59Z
-```
-
-### Relative Dates
-
-Some endpoints support relative date calculations:
-
-```json
-{
-  "filters": {
-    "created_at_gte": "now-30d",
-    "updated_at_gte": "today",
-    "due_date_lte": "now+7d"
-  }
-}
-```
-
-<Note>
-Check specific endpoint documentation to see if relative date formats are supported.
-</Note>
-
-## Best Practices
-
-### Client-Side Handling
-
-1. **Always store dates in UTC** in your database
-2. **Convert to UTC** before sending to API
-3. **Convert to local time** only for display
-4. **Use date libraries** like moment.js, date-fns, or native Date objects properly
-
-### Server-Side Handling
-
-```javascript
-// Node.js example
-function processDateFromAPI(dateString) {
-  // Parse UTC date from API
-  const utcDate = new Date(dateString);
-
-  // Validate the date
-  if (isNaN(utcDate.getTime())) {
-    throw new Error('Invalid date format');
-  }
-
-  return utcDate;
-}
-
-// Convert user input to UTC for API
-function prepareeDateForAPI(userInput, userTimezone) {
-  const moment = require('moment-timezone');
-  return moment.tz(userInput, userTimezone).utc().toISOString();
-}
-```
-
-### Common Pitfalls to Avoid
-
-- **Don't assume server timezone** - always use UTC
-- **Don't send timezone offsets** - convert to UTC first
-- **Don't use locale-specific formats** - stick to ISO 8601
-- **Don't forget milliseconds** when precision matters
-- **Don't mix date-only and datetime** - be consistent with format
-
-<Tip>
-Use browser developer tools or API testing tools to verify that your date strings are properly formatted before sending requests.
-</Tip>
-
-<Warning>
-Daylight saving time changes can cause issues if you're not properly handling UTC conversion. Always test your date handling around DST transition periods.
-</Warning>

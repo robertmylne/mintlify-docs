@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://api.caspen.test/v1"
+      "url": "https://api.caspen.localhost/v1"
     }
   ],
   "paths": {
@@ -174,15 +174,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "first_name": {
-                    "type": "string"
-                  },
-                  "last_name": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/UpdateClientRequest"
               }
             }
           }
@@ -198,14 +190,14 @@
               }
             }
           },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          },
           "404": {
             "$ref": "#/components/responses/ModelNotFoundException"
           },
           "401": {
             "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
           }
         }
       }
@@ -213,6 +205,91 @@
   },
   "components": {
     "schemas": {
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "addressable_id": {
+            "type": "string"
+          },
+          "line1": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "line2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postal_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "formatted": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "addressable_id",
+          "line1",
+          "line2",
+          "city",
+          "state",
+          "postal_code",
+          "country_code",
+          "country",
+          "created_at",
+          "updated_at",
+          "formatted"
+        ],
+        "title": "Address"
+      },
       "ClientCollection": {
         "type": "array",
         "items": {
@@ -225,27 +302,438 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique client identifier.",
+            "description": "The client's unique identifier.",
             "examples": [
               "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
             ]
           },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's honorific title.",
+            "examples": [
+              "Ms"
+            ]
+          },
           "first_name": {
             "type": "string",
-            "description": "Client given name.",
+            "description": "The client's given name.",
             "examples": [
               "Helen"
             ]
           },
           "last_name": {
             "type": "string",
-            "description": "Client family name.",
+            "description": "The client's family name.",
             "examples": [
               "Keller"
+            ]
+          },
+          "preferred_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's preferred name.",
+            "examples": [
+              "Nell"
+            ]
+          },
+          "profession": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's profession or occupation.",
+            "examples": [
+              "Teacher"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's email address.",
+            "examples": [
+              "helen.keller@example.com"
+            ]
+          },
+          "date_of_birth": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's date of birth (ISO 8601).",
+            "examples": [
+              "1987-06-27"
+            ]
+          },
+          "sex": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's sex assigned at birth.",
+            "examples": [
+              "female"
+            ]
+          },
+          "gender_identity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's gender identity.",
+            "examples": [
+              "Woman"
+            ]
+          },
+          "pronouns": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's pronouns.",
+            "examples": [
+              "she/her"
+            ]
+          },
+          "privacy_policy_consent": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's privacy policy consent status.",
+            "examples": [
+              "accepted"
+            ]
+          },
+          "medications": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "The client's medications.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "dosage": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "allergies": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "The client's allergies.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "reaction": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "intolerances": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "The client's intolerances.",
+            "examples": [
+              [
+                "Gluten",
+                "Lactose"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "emergency_contact_name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's emergency contact name.",
+            "examples": [
+              "Anne Sullivan"
+            ]
+          },
+          "emergency_contact_phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's emergency contact phone number.",
+            "examples": [
+              "+61401111222"
+            ]
+          },
+          "emergency_contact_relationship": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's relationship to the emergency contact.",
+            "examples": [
+              "Guardian"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's practitioner or admin notes.",
+            "examples": [
+              "Client prefers morning appointments."
+            ]
+          },
+          "alert": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's alert message for staff.",
+            "examples": [
+              "Requires wheelchair access."
+            ]
+          },
+          "referral_type_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's referral type identifier.",
+            "examples": [
+              "ret_01J11QXSM53YENWF114C0MWGDJ"
+            ]
+          },
+          "referral_description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's referral description.",
+            "examples": [
+              "Referred by GP at City Clinic."
+            ]
+          },
+          "referred_by_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's referring entity identifier.",
+            "examples": [
+              "cli_01HQQZCM1VDNHXDFEHX4X4KK52"
+            ]
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The client's primary phone number.",
+            "examples": [
+              "+61400123456"
+            ]
+          },
+          "phone_numbers": {
+            "type": "array",
+            "description": "A list of the client's additional phone numbers.",
+            "examples": [
+              [
+                {
+                  "id": "pho_01HQR12PABCD1234EFGH56789",
+                  "code": "+61",
+                  "number": "400123456",
+                  "type": "mobile"
+                }
+              ]
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "address": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "The client's address details.",
+            "examples": [
+              {
+                "line1": "123 Sample Street",
+                "line2": null,
+                "city": "Sydney",
+                "state": "NSW",
+                "postal_code": "2000",
+                "country_code": "AU"
+              }
+            ],
+            "properties": {
+              "line1": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "line2": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "city": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "state": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "postal_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "country_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "tag_ids": {
+            "type": "array",
+            "description": "The IDs of tags attached to the client.",
+            "examples": [
+              [
+                "tag_01HYHYQHA682J0K1RW7B2HVA9F",
+                "tag_01HYHYW37MTYJPMT5JV4RN99GK"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp when the client was created (ISO 8601).",
+            "examples": [
+              "2024-01-01T12:00:00Z"
             ]
           }
         },
         "title": "ClientResource"
+      },
+      "NdisFundManagement": {
+        "type": "string",
+        "enum": [
+          "self_managed",
+          "plan_managed",
+          "ndia_managed"
+        ],
+        "title": "NdisFundManagement"
+      },
+      "PhoneNumber": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "phoneable_id": {
+            "type": "string"
+          },
+          "phoneable_type": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "number_international": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "phoneable_id",
+          "phoneable_type",
+          "code",
+          "number",
+          "type",
+          "created_at",
+          "updated_at",
+          "number_international"
+        ],
+        "title": "PhoneNumber"
       },
       "PrivacyPolicyConsent": {
         "type": "string",
@@ -501,6 +989,263 @@
           "last_name"
         ],
         "title": "StoreClientRequest"
+      },
+      "UpdateClientRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "preferred_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "profession": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "email"
+          },
+          "date_of_birth": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "sex": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gender_identity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pronouns": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "privacy_policy_consent": {
+            "$ref": "#/components/schemas/PrivacyPolicyConsent"
+          },
+          "emergency_contact_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emergency_contact_phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emergency_contact_relationship": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "alert": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 500
+          },
+          "referral_type_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "referral_description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "referred_by_id": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "intolerances": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "line2": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "city": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "state": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "postal_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "country_code": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "tag_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "ndis_details": {
+            "type": "object",
+            "properties": {
+              "ndis_number": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "fund_management": {
+                "$ref": "#/components/schemas/NdisFundManagement"
+              }
+            }
+          },
+          "medications": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "dosage": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "allergies": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "reaction": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "phone_numbers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "number": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "enum": [
+                    "mobile",
+                    "home",
+                    "work",
+                    "other"
+                  ]
+                }
+              },
+              "required": [
+                "number",
+                "code"
+              ]
+            }
+          }
+        },
+        "title": "UpdateClientRequest"
       }
     },
     "responses": {
