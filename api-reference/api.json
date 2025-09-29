@@ -6,7 +6,8 @@
     },
     "servers": [
         {
-            "url": "https://api.caspen.localhost/v1"
+            "url": "https://api.caspen.com/v1",
+            "description": "Production"
         }
     ],
     "paths": {
