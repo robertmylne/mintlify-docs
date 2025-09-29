@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:docs.stripe.com)",
       "WebFetch(domain:www.mintlify.com)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": [],
     "ask": []

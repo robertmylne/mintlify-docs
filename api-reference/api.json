@@ -1,1322 +1,3612 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Caspen",
-    "version": "0.0.1"
-  },
-  "servers": [
-    {
-      "url": "https://api.caspen.localhost/v1"
-    }
-  ],
-  "paths": {
-    "/clients": {
-      "get": {
-        "operationId": "client.index",
-        "tags": [
-          "Client"
-        ],
-        "parameters": [
-          {
-            "name": "cursor",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Paginated set of `ClientResource`",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/ClientCollection"
-                    },
-                    "links": {
-                      "type": "object",
-                      "properties": {
-                        "prev": {
-                          "type": [
-                            "string",
-                            "null"
-                          ]
-                        },
-                        "next": {
-                          "type": [
-                            "string",
-                            "null"
-                          ]
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Caspen",
+        "version": "0.0.1"
+    },
+    "servers": [
+        {
+            "url": "https://api.caspen.localhost/v1"
+        }
+    ],
+    "paths": {
+        "/appointments": {
+            "get": {
+                "operationId": "appointment.index",
+                "tags": [
+                    "Appointment"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
                         }
-                      },
-                      "required": [
-                        "prev",
-                        "next"
-                      ]
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
                     }
-                  },
-                  "required": [
-                    "data",
-                    "links"
-                  ]
-                }
-              }
-            }
-          },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          },
-          "401": {
-            "$ref": "#/components/responses/AuthenticationException"
-          }
-        }
-      },
-      "post": {
-        "operationId": "client.store",
-        "tags": [
-          "Client"
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StoreClientRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "`ClientResource`",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClientResource"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/AuthenticationException"
-          },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          }
-        }
-      }
-    },
-    "/clients/{client}": {
-      "get": {
-        "operationId": "client.show",
-        "tags": [
-          "Client"
-        ],
-        "parameters": [
-          {
-            "name": "client",
-            "in": "path",
-            "required": true,
-            "description": "The client ID",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "`ClientResource`",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClientResource"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/ModelNotFoundException"
-          },
-          "401": {
-            "$ref": "#/components/responses/AuthenticationException"
-          }
-        }
-      },
-      "post": {
-        "operationId": "client.update",
-        "tags": [
-          "Client"
-        ],
-        "parameters": [
-          {
-            "name": "client",
-            "in": "path",
-            "required": true,
-            "description": "The client ID",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateClientRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "`ClientResource`",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClientResource"
-                }
-              }
-            }
-          },
-          "404": {
-            "$ref": "#/components/responses/ModelNotFoundException"
-          },
-          "401": {
-            "$ref": "#/components/responses/AuthenticationException"
-          },
-          "422": {
-            "$ref": "#/components/responses/ValidationException"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Address": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "addressable_id": {
-            "type": "string"
-          },
-          "line1": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "line2": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "city": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "state": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "postal_code": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "country_code": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "country": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "created_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "formatted": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "addressable_id",
-          "line1",
-          "line2",
-          "city",
-          "state",
-          "postal_code",
-          "country_code",
-          "country",
-          "created_at",
-          "updated_at",
-          "formatted"
-        ],
-        "title": "Address"
-      },
-      "ClientCollection": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/ClientResource"
-        },
-        "title": "ClientCollection"
-      },
-      "ClientResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The client's unique identifier.",
-            "examples": [
-              "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
-            ]
-          },
-          "title": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's honorific title.",
-            "examples": [
-              "Ms"
-            ]
-          },
-          "first_name": {
-            "type": "string",
-            "description": "The client's given name.",
-            "examples": [
-              "Helen"
-            ]
-          },
-          "last_name": {
-            "type": "string",
-            "description": "The client's family name.",
-            "examples": [
-              "Keller"
-            ]
-          },
-          "preferred_name": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's preferred name.",
-            "examples": [
-              "Nell"
-            ]
-          },
-          "profession": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's profession or occupation.",
-            "examples": [
-              "Teacher"
-            ]
-          },
-          "email": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's email address.",
-            "examples": [
-              "helen.keller@example.com"
-            ]
-          },
-          "date_of_birth": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's date of birth (ISO 8601).",
-            "examples": [
-              "1987-06-27"
-            ]
-          },
-          "sex": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's sex assigned at birth.",
-            "examples": [
-              "female"
-            ]
-          },
-          "gender_identity": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's gender identity.",
-            "examples": [
-              "Woman"
-            ]
-          },
-          "pronouns": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's pronouns.",
-            "examples": [
-              "she/her"
-            ]
-          },
-          "privacy_policy_consent": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's privacy policy consent status.",
-            "examples": [
-              "accepted"
-            ]
-          },
-          "medications": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "description": "The client's medications.",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "dosage": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "allergies": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "description": "The client's allergies.",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "reaction": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "intolerances": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "description": "The client's intolerances.",
-            "examples": [
-              [
-                "Gluten",
-                "Lactose"
-              ]
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "emergency_contact_name": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's emergency contact name.",
-            "examples": [
-              "Anne Sullivan"
-            ]
-          },
-          "emergency_contact_phone": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's emergency contact phone number.",
-            "examples": [
-              "+61401111222"
-            ]
-          },
-          "emergency_contact_relationship": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's relationship to the emergency contact.",
-            "examples": [
-              "Guardian"
-            ]
-          },
-          "notes": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's practitioner or admin notes.",
-            "examples": [
-              "Client prefers morning appointments."
-            ]
-          },
-          "alert": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's alert message for staff.",
-            "examples": [
-              "Requires wheelchair access."
-            ]
-          },
-          "referral_type_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's referral type identifier.",
-            "examples": [
-              "ret_01J11QXSM53YENWF114C0MWGDJ"
-            ]
-          },
-          "referral_description": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's referral description.",
-            "examples": [
-              "Referred by GP at City Clinic."
-            ]
-          },
-          "referred_by_id": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's referring entity identifier.",
-            "examples": [
-              "cli_01HQQZCM1VDNHXDFEHX4X4KK52"
-            ]
-          },
-          "phone_number": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "description": "The client's primary phone number.",
-            "examples": [
-              "+61400123456"
-            ]
-          },
-          "phone_numbers": {
-            "type": "array",
-            "description": "A list of the client's additional phone numbers.",
-            "examples": [
-              [
-                {
-                  "id": "pho_01HQR12PABCD1234EFGH56789",
-                  "code": "+61",
-                  "number": "400123456",
-                  "type": "mobile"
-                }
-              ]
-            ],
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                },
-                "number": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "address": {
-            "type": [
-              "object",
-              "null"
-            ],
-            "description": "The client's address details.",
-            "examples": [
-              {
-                "line1": "123 Sample Street",
-                "line2": null,
-                "city": "Sydney",
-                "state": "NSW",
-                "postal_code": "2000",
-                "country_code": "AU"
-              }
-            ],
-            "properties": {
-              "line1": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "line2": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "city": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "state": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "postal_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "country_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            }
-          },
-          "tag_ids": {
-            "type": "array",
-            "description": "The IDs of tags attached to the client.",
-            "examples": [
-              [
-                "tag_01HYHYQHA682J0K1RW7B2HVA9F",
-                "tag_01HYHYW37MTYJPMT5JV4RN99GK"
-              ]
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "created_at": {
-            "type": "string",
-            "description": "The timestamp when the client was created (ISO 8601).",
-            "examples": [
-              "2024-01-01T12:00:00Z"
-            ]
-          }
-        },
-        "title": "ClientResource"
-      },
-      "NdisFundManagement": {
-        "type": "string",
-        "enum": [
-          "self_managed",
-          "plan_managed",
-          "ndia_managed"
-        ],
-        "title": "NdisFundManagement"
-      },
-      "PhoneNumber": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "phoneable_id": {
-            "type": "string"
-          },
-          "phoneable_type": {
-            "type": "string"
-          },
-          "code": {
-            "type": "string"
-          },
-          "number": {
-            "type": "string"
-          },
-          "type": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "created_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "number_international": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "phoneable_id",
-          "phoneable_type",
-          "code",
-          "number",
-          "type",
-          "created_at",
-          "updated_at",
-          "number_international"
-        ],
-        "title": "PhoneNumber"
-      },
-      "PrivacyPolicyConsent": {
-        "type": "string",
-        "enum": [
-          "accepted",
-          "rejected"
-        ],
-        "title": "PrivacyPolicyConsent"
-      },
-      "StoreClientRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "first_name": {
-            "type": "string"
-          },
-          "last_name": {
-            "type": "string"
-          },
-          "preferred_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "profession": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "email": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "email"
-          },
-          "date_of_birth": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "sex": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "gender_identity": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "pronouns": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "privacy_policy_consent": {
-            "$ref": "#/components/schemas/PrivacyPolicyConsent"
-          },
-          "emergency_contact_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "emergency_contact_phone": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "emergency_contact_relationship": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "notes": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "alert": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "maxLength": 500
-          },
-          "referral_type_id": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "referral_description": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "referred_by_id": {
-            "type": "string"
-          },
-          "phone_number": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "intolerances": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "address": {
-            "type": "object",
-            "properties": {
-              "line1": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "line2": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "city": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "state": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "postal_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "country_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            }
-          },
-          "tag_ids": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "medications": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "dosage": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "allergies": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "reaction": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "phone_numbers": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": [
-                    "string",
-                    "null"
-                  ],
-                  "enum": [
-                    "mobile",
-                    "home",
-                    "work",
-                    "other"
-                  ]
-                }
-              },
-              "required": [
-                "number",
-                "code"
-              ]
-            }
-          }
-        },
-        "required": [
-          "first_name",
-          "last_name"
-        ],
-        "title": "StoreClientRequest"
-      },
-      "UpdateClientRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "first_name": {
-            "type": "string"
-          },
-          "last_name": {
-            "type": "string"
-          },
-          "preferred_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "profession": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "email": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "email"
-          },
-          "date_of_birth": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "format": "date-time"
-          },
-          "sex": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "gender_identity": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "pronouns": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "privacy_policy_consent": {
-            "$ref": "#/components/schemas/PrivacyPolicyConsent"
-          },
-          "emergency_contact_name": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "emergency_contact_phone": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "emergency_contact_relationship": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "notes": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "alert": {
-            "type": [
-              "string",
-              "null"
-            ],
-            "maxLength": 500
-          },
-          "referral_type_id": {
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
-          "referral_description": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "referred_by_id": {
-            "type": "string"
-          },
-          "phone_number": {
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "intolerances": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "string"
-            }
-          },
-          "address": {
-            "type": "object",
-            "properties": {
-              "line1": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "line2": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "city": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "state": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "postal_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "country_code": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              }
-            }
-          },
-          "tag_ids": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "ndis_details": {
-            "type": "object",
-            "properties": {
-              "ndis_number": {
-                "type": [
-                  "string",
-                  "null"
-                ]
-              },
-              "fund_management": {
-                "$ref": "#/components/schemas/NdisFundManagement"
-              }
-            }
-          },
-          "medications": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "dosage": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "allergies": {
-            "type": [
-              "array",
-              "null"
-            ],
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "reaction": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              }
-            }
-          },
-          "phone_numbers": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "number": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": [
-                    "string",
-                    "null"
-                  ],
-                  "enum": [
-                    "mobile",
-                    "home",
-                    "work",
-                    "other"
-                  ]
-                }
-              },
-              "required": [
-                "number",
-                "code"
-              ]
-            }
-          }
-        },
-        "title": "UpdateClientRequest"
-      }
-    },
-    "responses": {
-      "ValidationException": {
-        "description": "Validation error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "Errors overview."
-                },
-                "errors": {
-                  "type": "object",
-                  "description": "A detailed description of each field that failed validation.",
-                  "additionalProperties": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `AppointmentResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AppointmentCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
                     }
-                  }
                 }
-              },
-              "required": [
-                "message",
-                "errors"
-              ]
-            }
-          }
-        }
-      },
-      "AuthenticationException": {
-        "description": "Unauthenticated",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "Error overview."
+            },
+            "post": {
+                "operationId": "appointment.store",
+                "tags": [
+                    "Appointment"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreAppointmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
                 }
-              },
-              "required": [
-                "message"
-              ]
             }
-          }
-        }
-      },
-      "ModelNotFoundException": {
-        "description": "Not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "Error overview."
+        },
+        "/appointments/{appointment}": {
+            "get": {
+                "operationId": "appointment.show",
+                "tags": [
+                    "Appointment"
+                ],
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "description": "The appointment ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`AppointmentResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AppointmentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
                 }
-              },
-              "required": [
-                "message"
-              ]
+            },
+            "post": {
+                "operationId": "appointment.update",
+                "tags": [
+                    "Appointment"
+                ],
+                "parameters": [
+                    {
+                        "name": "appointment",
+                        "in": "path",
+                        "required": true,
+                        "description": "The appointment ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateAppointmentRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`AppointmentResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AppointmentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
             }
-          }
+        },
+        "/availabilities": {
+            "get": {
+                "operationId": "availability.index",
+                "tags": [
+                    "Availability"
+                ],
+                "parameters": [
+                    {
+                        "name": "location_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "practitioner_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "from_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`AvailabilityCollection`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AvailabilityCollection"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/availability_slots": {
+            "get": {
+                "operationId": "availabilitySlot.index",
+                "tags": [
+                    "AvailabilitySlot"
+                ],
+                "parameters": [
+                    {
+                        "name": "location_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "service_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "practitioner_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`AvailabilitySlotCollection`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AvailabilitySlotCollection"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/clients": {
+            "get": {
+                "operationId": "client.index",
+                "tags": [
+                    "Client"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `ClientResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ClientCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "client.store",
+                "tags": [
+                    "Client"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`ClientResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/clients/{client}": {
+            "get": {
+                "operationId": "client.show",
+                "tags": [
+                    "Client"
+                ],
+                "parameters": [
+                    {
+                        "name": "client",
+                        "in": "path",
+                        "required": true,
+                        "description": "The client ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`ClientResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "client.update",
+                "tags": [
+                    "Client"
+                ],
+                "parameters": [
+                    {
+                        "name": "client",
+                        "in": "path",
+                        "required": true,
+                        "description": "The client ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateClientRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`ClientResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            }
+        },
+        "/contacts": {
+            "get": {
+                "operationId": "contact.index",
+                "tags": [
+                    "Contact"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `ContactResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ContactCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/contacts/{contact}": {
+            "get": {
+                "operationId": "contact.show",
+                "tags": [
+                    "Contact"
+                ],
+                "parameters": [
+                    {
+                        "name": "contact",
+                        "in": "path",
+                        "required": true,
+                        "description": "The contact ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`ContactResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContactResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/locations": {
+            "get": {
+                "operationId": "location.index",
+                "tags": [
+                    "Location"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `LocationResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/LocationCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/locations/{location}": {
+            "get": {
+                "operationId": "location.show",
+                "tags": [
+                    "Location"
+                ],
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "path",
+                        "required": true,
+                        "description": "The location ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`LocationResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LocationResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/practitioners": {
+            "get": {
+                "operationId": "practitioner.index",
+                "tags": [
+                    "Practitioner"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `PractitionerResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/PractitionerCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/practitioners/{practitioner}": {
+            "get": {
+                "operationId": "practitioner.show",
+                "tags": [
+                    "Practitioner"
+                ],
+                "parameters": [
+                    {
+                        "name": "practitioner",
+                        "in": "path",
+                        "required": true,
+                        "description": "The practitioner ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`PractitionerResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PractitionerResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/services": {
+            "get": {
+                "operationId": "service.index",
+                "tags": [
+                    "Service"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `ServiceResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/ServiceCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/services/{service}": {
+            "get": {
+                "operationId": "service.show",
+                "tags": [
+                    "Service"
+                ],
+                "parameters": [
+                    {
+                        "name": "service",
+                        "in": "path",
+                        "required": true,
+                        "description": "The service ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`ServiceResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
         }
-      }
+    },
+    "components": {
+        "schemas": {
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "addressable_id": {
+                        "type": "string"
+                    },
+                    "line1": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "line2": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "city": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "state": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "postal_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "country_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "country": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "formatted": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "addressable_id",
+                    "line1",
+                    "line2",
+                    "city",
+                    "state",
+                    "postal_code",
+                    "country_code",
+                    "country",
+                    "created_at",
+                    "updated_at",
+                    "formatted"
+                ],
+                "title": "Address"
+            },
+            "AppointmentCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/AppointmentResource"
+                },
+                "title": "AppointmentCollection"
+            },
+            "AppointmentResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The appointment's unique identifier.",
+                        "examples": [
+                            "app_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "location_id": {
+                        "type": "string",
+                        "description": "The location identifier where the appointment takes place.",
+                        "examples": [
+                            "loc_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "practitioner_id": {
+                        "type": "string",
+                        "description": "The practitioner identifier who provides the service.",
+                        "examples": [
+                            "pra_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "service_id": {
+                        "type": "string",
+                        "description": "The service identifier being provided.",
+                        "examples": [
+                            "ser_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "client_id": {
+                        "type": "string",
+                        "description": "The client identifier who has the appointment.",
+                        "examples": [
+                            "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "client_package_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client package identifier if this appointment uses a package.",
+                        "examples": [
+                            "cpk_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "case_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The case identifier if this appointment is part of a case.",
+                        "examples": [
+                            "cas_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "description": "The appointment start time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T10:00:00Z"
+                        ]
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "description": "The appointment end time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T11:00:00Z"
+                        ]
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "description": "The appointment duration in minutes.",
+                        "examples": [
+                            60
+                        ]
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "The appointment status.",
+                        "examples": [
+                            "pending"
+                        ]
+                    },
+                    "confirmed": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Whether the appointment is confirmed.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "confirmed_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "When the appointment was confirmed (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T09:30:00Z"
+                        ]
+                    },
+                    "room_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The room identifier where the appointment takes place.",
+                        "examples": [
+                            "rom_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "vehicle_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The vehicle identifier if transportation is involved.",
+                        "examples": [
+                            "veh_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "resource_ids": {
+                        "type": "array",
+                        "description": "The IDs of resources required for this appointment.",
+                        "examples": [
+                            [
+                                "res_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "res_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The appointment note.",
+                        "examples": [
+                            "Client requested morning appointment."
+                        ]
+                    },
+                    "cancellation_reason_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The cancellation reason identifier if cancelled.",
+                        "examples": [
+                            "cnr_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "cancellation_note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The cancellation note if cancelled.",
+                        "examples": [
+                            "Client had to travel unexpectedly."
+                        ]
+                    },
+                    "cancelled_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "When the appointment was cancelled (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T08:00:00Z"
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the appointment was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "AppointmentResource"
+            },
+            "AvailabilityCollection": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AvailabilityResource"
+                        }
+                    }
+                },
+                "required": [
+                    "data"
+                ],
+                "title": "AvailabilityCollection"
+            },
+            "AvailabilityResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The availability's unique identifier.",
+                        "examples": [
+                            "ava_01HZR88VXZ3G2NTVPEB2PCCKDY"
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the availability was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    },
+                    "date": {
+                        "type": "string",
+                        "description": "The availability date (ISO 8601).",
+                        "examples": [
+                            "2025-09-22"
+                        ]
+                    },
+                    "day": {
+                        "type": "string",
+                        "description": "The day of the week abbreviation.",
+                        "examples": [
+                            "mon"
+                        ]
+                    },
+                    "end_time": {
+                        "type": "string",
+                        "description": "The end time in 24-hour format.",
+                        "examples": [
+                            "17:00"
+                        ]
+                    },
+                    "location_id": {
+                        "type": "string",
+                        "description": "The location's unique identifier.",
+                        "examples": [
+                            "loc_01HZR88VXZ3G2NTVPEB2PCCKDY"
+                        ]
+                    },
+                    "practitioner_id": {
+                        "type": "string",
+                        "description": "The practitioner's unique identifier.",
+                        "examples": [
+                            "pra_01HWPZ5P0ENVS5W7ZFAS0DW5PT"
+                        ]
+                    },
+                    "repeating": {
+                        "type": "boolean",
+                        "description": "Whether this availability repeats.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "repeating_end_date": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The end date for repeating availability (ISO 8601).",
+                        "examples": [
+                            "2025-12-31"
+                        ]
+                    },
+                    "repeating_interval": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The repeating interval type.",
+                        "examples": [
+                            "weekly"
+                        ]
+                    },
+                    "start_time": {
+                        "type": "string",
+                        "description": "The start time in 24-hour format.",
+                        "examples": [
+                            "09:00"
+                        ]
+                    }
+                },
+                "title": "AvailabilityResource"
+            },
+            "AvailabilitySlotCollection": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AvailabilitySlotResource"
+                        }
+                    }
+                },
+                "required": [
+                    "data"
+                ],
+                "title": "AvailabilitySlotCollection"
+            },
+            "AvailabilitySlotResource": {
+                "type": "object",
+                "properties": {
+                    "start_time_local": {
+                        "type": "string",
+                        "description": "The start time in local timezone.",
+                        "examples": [
+                            "09:00"
+                        ]
+                    },
+                    "start_date_local": {
+                        "type": "string",
+                        "description": "The start date in local timezone.",
+                        "examples": [
+                            "2024-01-15"
+                        ]
+                    },
+                    "local_timezone": {
+                        "type": "string",
+                        "description": "The local timezone for this slot.",
+                        "examples": [
+                            "Australia/Sydney"
+                        ]
+                    },
+                    "start_datetime_utc": {
+                        "type": "string",
+                        "description": "The start datetime in UTC timezone (ISO 8601).",
+                        "examples": [
+                            "2024-01-14T22:00:00Z"
+                        ]
+                    }
+                },
+                "title": "AvailabilitySlotResource"
+            },
+            "ClientCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/ClientResource"
+                },
+                "title": "ClientCollection"
+            },
+            "ClientResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The client's unique identifier.",
+                        "examples": [
+                            "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's honorific title.",
+                        "examples": [
+                            "Ms"
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "description": "The client's given name.",
+                        "examples": [
+                            "Helen"
+                        ]
+                    },
+                    "last_name": {
+                        "type": "string",
+                        "description": "The client's family name.",
+                        "examples": [
+                            "Keller"
+                        ]
+                    },
+                    "preferred_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's preferred name.",
+                        "examples": [
+                            "Nell"
+                        ]
+                    },
+                    "profession": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's profession or occupation.",
+                        "examples": [
+                            "Teacher"
+                        ]
+                    },
+                    "email": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's email address.",
+                        "examples": [
+                            "helen.keller@example.com"
+                        ]
+                    },
+                    "date_of_birth": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's date of birth (ISO 8601).",
+                        "examples": [
+                            "1987-06-27"
+                        ]
+                    },
+                    "sex": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's sex assigned at birth.",
+                        "examples": [
+                            "female"
+                        ]
+                    },
+                    "gender_identity": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's gender identity.",
+                        "examples": [
+                            "Woman"
+                        ]
+                    },
+                    "pronouns": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's pronouns.",
+                        "examples": [
+                            "she/her"
+                        ]
+                    },
+                    "privacy_policy_consent": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's privacy policy consent status.",
+                        "examples": [
+                            "accepted"
+                        ]
+                    },
+                    "medications": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "description": "The client's medications.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "dosage": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "allergies": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "description": "The client's allergies.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "reaction": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "intolerances": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "description": "The client's intolerances.",
+                        "examples": [
+                            [
+                                "Gluten",
+                                "Lactose"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "emergency_contact_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's emergency contact name.",
+                        "examples": [
+                            "Anne Sullivan"
+                        ]
+                    },
+                    "emergency_contact_phone": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's emergency contact phone number.",
+                        "examples": [
+                            "+61401111222"
+                        ]
+                    },
+                    "emergency_contact_relationship": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's relationship to the emergency contact.",
+                        "examples": [
+                            "Guardian"
+                        ]
+                    },
+                    "notes": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's practitioner or admin notes.",
+                        "examples": [
+                            "Client prefers morning appointments."
+                        ]
+                    },
+                    "alert": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's alert message for staff.",
+                        "examples": [
+                            "Requires wheelchair access."
+                        ]
+                    },
+                    "referral_type_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's referral type identifier.",
+                        "examples": [
+                            "ret_01J11QXSM53YENWF114C0MWGDJ"
+                        ]
+                    },
+                    "referral_description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's referral description.",
+                        "examples": [
+                            "Referred by GP at City Clinic."
+                        ]
+                    },
+                    "referred_by_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's referring entity identifier.",
+                        "examples": [
+                            "cli_01HQQZCM1VDNHXDFEHX4X4KK52"
+                        ]
+                    },
+                    "phone_number": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client's primary phone number.",
+                        "examples": [
+                            "+61400123456"
+                        ]
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "description": "A list of the client's additional phone numbers.",
+                        "examples": [
+                            [
+                                {
+                                    "id": "pho_01HQR12PABCD1234EFGH56789",
+                                    "code": "+61",
+                                    "number": "400123456",
+                                    "type": "mobile"
+                                }
+                            ]
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "number": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "address": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "The client's address details.",
+                        "examples": [
+                            {
+                                "line1": "123 Sample Street",
+                                "line2": null,
+                                "city": "Sydney",
+                                "state": "NSW",
+                                "postal_code": "2000",
+                                "country_code": "AU"
+                            }
+                        ],
+                        "properties": {
+                            "line1": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "line2": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "city": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "state": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "postal_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "description": "The IDs of tags attached to the client.",
+                        "examples": [
+                            [
+                                "tag_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "tag_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the client was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "ClientResource"
+            },
+            "ContactCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/ContactResource"
+                },
+                "title": "ContactCollection"
+            },
+            "ContactResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The contact's unique identifier.",
+                        "examples": [
+                            "con_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The contact's type.",
+                        "examples": [
+                            "referrer"
+                        ]
+                    },
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's honorific title.",
+                        "examples": [
+                            "Dr"
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string",
+                        "description": "The contact's given name.",
+                        "examples": [
+                            "John"
+                        ]
+                    },
+                    "last_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's family name.",
+                        "examples": [
+                            "Smith"
+                        ]
+                    },
+                    "preferred_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's preferred name.",
+                        "examples": [
+                            "Johnny"
+                        ]
+                    },
+                    "profession": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's profession or occupation.",
+                        "examples": [
+                            "General Practitioner"
+                        ]
+                    },
+                    "company": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's company or organization.",
+                        "examples": [
+                            "City Medical Centre"
+                        ]
+                    },
+                    "email": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's email address.",
+                        "examples": [
+                            "john.smith@citymedical.com"
+                        ]
+                    },
+                    "notes": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The contact's notes.",
+                        "examples": [
+                            "Preferred referrer for orthopedic cases."
+                        ]
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "description": "A list of the contact's phone numbers.",
+                        "examples": [
+                            [
+                                {
+                                    "id": "pho_01HQR12PABCD1234EFGH56789",
+                                    "code": "+61",
+                                    "number": "400123456",
+                                    "type": "mobile"
+                                }
+                            ]
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "number": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "address": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "The contact's address details.",
+                        "examples": [
+                            {
+                                "line1": "123 Medical Street",
+                                "line2": "Suite 4",
+                                "city": "Sydney",
+                                "state": "NSW",
+                                "postal_code": "2000",
+                                "country_code": "AU"
+                            }
+                        ],
+                        "properties": {
+                            "line1": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "line2": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "city": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "state": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "postal_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the contact was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "ContactResource"
+            },
+            "LocationCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/LocationResource"
+                },
+                "title": "LocationCollection"
+            },
+            "LocationResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The location's unique identifier.",
+                        "examples": [
+                            "loc_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The location's name.",
+                        "examples": [
+                            "Main Clinic"
+                        ]
+                    },
+                    "description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's description.",
+                        "examples": [
+                            "Our primary healthcare facility offering comprehensive services."
+                        ]
+                    },
+                    "email": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's email address.",
+                        "examples": [
+                            "reception@mainclinic.com"
+                        ]
+                    },
+                    "phone": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's phone number.",
+                        "examples": [
+                            "+61400123456"
+                        ]
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "description": "The location's timezone.",
+                        "examples": [
+                            "Australia/Sydney"
+                        ]
+                    },
+                    "country_code": {
+                        "type": "string",
+                        "description": "The location's country code.",
+                        "examples": [
+                            "AU"
+                        ]
+                    },
+                    "online_booking": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Whether online booking is enabled for this location.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "abn": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's Australian Business Number.",
+                        "examples": [
+                            "12 345 678 901"
+                        ]
+                    },
+                    "ndis_number": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's NDIS number.",
+                        "examples": [
+                            "4050123456"
+                        ]
+                    },
+                    "logo_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's logo media ID.",
+                        "examples": [
+                            "med_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "image_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The location's image media ID.",
+                        "examples": [
+                            "med_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "service_ids": {
+                        "type": "array",
+                        "description": "The IDs of services available at this location.",
+                        "examples": [
+                            [
+                                "ser_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "ser_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "practitioner_ids": {
+                        "type": "array",
+                        "description": "The IDs of practitioners working at this location.",
+                        "examples": [
+                            [
+                                "pra_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "pra_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "opening_hours": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "The location's opening hours for each day of the week.",
+                        "examples": [
+                            {
+                                "mon_active": true,
+                                "mon_opens_at": "09:00",
+                                "mon_closes_at": "17:00",
+                                "tue_active": true,
+                                "tue_opens_at": "09:00",
+                                "tue_closes_at": "17:00"
+                            }
+                        ],
+                        "properties": {
+                            "mon_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "mon_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "mon_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "tue_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "tue_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "tue_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "wed_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "wed_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "wed_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "thu_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "thu_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "thu_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "fri_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "fri_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "fri_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "sat_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "sat_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "sat_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "sun_active": {
+                                "type": [
+                                    "boolean",
+                                    "null"
+                                ]
+                            },
+                            "sun_opens_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "sun_closes_at": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "address": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "The location's address details.",
+                        "examples": [
+                            {
+                                "line1": "123 Health Street",
+                                "line2": "Level 2",
+                                "city": "Sydney",
+                                "state": "NSW",
+                                "postal_code": "2000",
+                                "country_code": "AU"
+                            }
+                        ],
+                        "properties": {
+                            "line1": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "line2": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "city": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "state": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "postal_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the location was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "LocationResource"
+            },
+            "NdisFundManagement": {
+                "type": "string",
+                "enum": [
+                    "self_managed",
+                    "plan_managed",
+                    "ndia_managed"
+                ],
+                "title": "NdisFundManagement"
+            },
+            "OpeningHour": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "location_id": {
+                        "type": "string"
+                    },
+                    "mon_active": {
+                        "type": "integer"
+                    },
+                    "mon_opens_at": {
+                        "type": "string"
+                    },
+                    "mon_closes_at": {
+                        "type": "string"
+                    },
+                    "tue_active": {
+                        "type": "integer"
+                    },
+                    "tue_opens_at": {
+                        "type": "string"
+                    },
+                    "tue_closes_at": {
+                        "type": "string"
+                    },
+                    "wed_active": {
+                        "type": "integer"
+                    },
+                    "wed_opens_at": {
+                        "type": "string"
+                    },
+                    "wed_closes_at": {
+                        "type": "string"
+                    },
+                    "thu_active": {
+                        "type": "integer"
+                    },
+                    "thu_opens_at": {
+                        "type": "string"
+                    },
+                    "thu_closes_at": {
+                        "type": "string"
+                    },
+                    "fri_active": {
+                        "type": "integer"
+                    },
+                    "fri_opens_at": {
+                        "type": "string"
+                    },
+                    "fri_closes_at": {
+                        "type": "string"
+                    },
+                    "sat_active": {
+                        "type": "integer"
+                    },
+                    "sat_opens_at": {
+                        "type": "string"
+                    },
+                    "sat_closes_at": {
+                        "type": "string"
+                    },
+                    "sun_active": {
+                        "type": "integer"
+                    },
+                    "sun_opens_at": {
+                        "type": "string"
+                    },
+                    "sun_closes_at": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "location_id",
+                    "mon_active",
+                    "mon_opens_at",
+                    "mon_closes_at",
+                    "tue_active",
+                    "tue_opens_at",
+                    "tue_closes_at",
+                    "wed_active",
+                    "wed_opens_at",
+                    "wed_closes_at",
+                    "thu_active",
+                    "thu_opens_at",
+                    "thu_closes_at",
+                    "fri_active",
+                    "fri_opens_at",
+                    "fri_closes_at",
+                    "sat_active",
+                    "sat_opens_at",
+                    "sat_closes_at",
+                    "sun_active",
+                    "sun_opens_at",
+                    "sun_closes_at"
+                ],
+                "title": "OpeningHour"
+            },
+            "PhoneNumber": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "phoneable_id": {
+                        "type": "string"
+                    },
+                    "phoneable_type": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "number_international": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id",
+                    "phoneable_id",
+                    "phoneable_type",
+                    "code",
+                    "number",
+                    "type",
+                    "created_at",
+                    "updated_at",
+                    "number_international"
+                ],
+                "title": "PhoneNumber"
+            },
+            "PractitionerCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/PractitionerResource"
+                },
+                "title": "PractitionerCollection"
+            },
+            "PractitionerResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The practitioner's unique identifier.",
+                        "examples": [
+                            "pra_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "online_booking": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Whether online booking is enabled for this practitioner.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "service_ids": {
+                        "type": "array",
+                        "description": "The IDs of services provided by this practitioner.",
+                        "examples": [
+                            [
+                                "ser_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "ser_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "location_ids": {
+                        "type": "array",
+                        "description": "The IDs of locations where this practitioner works.",
+                        "examples": [
+                            [
+                                "loc_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "loc_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "provider_numbers": {
+                        "type": "array",
+                        "description": "The practitioner's provider numbers for different locations.",
+                        "examples": [
+                            [
+                                {
+                                    "id": "prn_01HQR12PABCD1234EFGH56789",
+                                    "location_id": "loc_01HQFQ9QWTNNPY58FZ8CB3FWWK",
+                                    "type": "medicare",
+                                    "number": "123456A"
+                                }
+                            ]
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "location_id": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "number": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the practitioner was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "PractitionerResource"
+            },
+            "PrivacyPolicyConsent": {
+                "type": "string",
+                "enum": [
+                    "accepted",
+                    "rejected"
+                ],
+                "title": "PrivacyPolicyConsent"
+            },
+            "ProviderNumber": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "practitioner_id": {
+                        "type": "string"
+                    },
+                    "location_id": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "practitioner_id",
+                    "location_id",
+                    "type",
+                    "number",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "ProviderNumber"
+            },
+            "RepeatInterval": {
+                "type": "string",
+                "enum": [
+                    "weekly",
+                    "fortnightly"
+                ],
+                "title": "RepeatInterval"
+            },
+            "RepeatingRuleFrequency": {
+                "type": "string",
+                "enum": [
+                    "weekly"
+                ],
+                "title": "RepeatingRuleFrequency"
+            },
+            "ServiceCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/ServiceResource"
+                },
+                "title": "ServiceCollection"
+            },
+            "ServiceResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The service's unique identifier.",
+                        "examples": [
+                            "ser_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "category_id": {
+                        "type": "string",
+                        "description": "The service category identifier.",
+                        "examples": [
+                            "cat_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "progress_note_template_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The progress note template identifier.",
+                        "examples": [
+                            "pnt_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "appointment_notification_set_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The appointment notification set identifier.",
+                        "examples": [
+                            "ans_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "tax_id": {
+                        "type": "string",
+                        "description": "The tax identifier.",
+                        "examples": [
+                            "tax_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The service's name.",
+                        "examples": [
+                            "Initial Consultation"
+                        ]
+                    },
+                    "description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The service's description.",
+                        "examples": [
+                            "Comprehensive initial assessment and treatment planning session."
+                        ]
+                    },
+                    "item_code": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The service's item code.",
+                        "examples": [
+                            "IC001"
+                        ]
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "description": "The service duration in minutes.",
+                        "examples": [
+                            60
+                        ]
+                    },
+                    "buffer_before_duration": {
+                        "type": "integer",
+                        "description": "The buffer time before the service in minutes.",
+                        "examples": [
+                            5
+                        ]
+                    },
+                    "buffer_after_duration": {
+                        "type": "integer",
+                        "description": "The buffer time after the service in minutes.",
+                        "examples": [
+                            10
+                        ]
+                    },
+                    "price": {
+                        "type": "number",
+                        "description": "The service price.",
+                        "examples": [
+                            150
+                        ]
+                    },
+                    "price_unit": {
+                        "type": "string",
+                        "description": "The service price unit.",
+                        "examples": [
+                            "per_session"
+                        ]
+                    },
+                    "online_booking": {
+                        "type": "boolean",
+                        "description": "Whether online booking is enabled for this service.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "practitioner_ids": {
+                        "type": "array",
+                        "description": "The IDs of practitioners who can provide this service.",
+                        "examples": [
+                            [
+                                "pra_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "pra_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "location_ids": {
+                        "type": "array",
+                        "description": "The IDs of locations where this service is available.",
+                        "examples": [
+                            [
+                                "loc_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "loc_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "description": "The IDs of tags attached to this service.",
+                        "examples": [
+                            [
+                                "tag_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "tag_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the service was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "ServiceResource"
+            },
+            "StoreAppointmentRequest": {
+                "type": "object",
+                "properties": {
+                    "location_id": {
+                        "type": "integer"
+                    },
+                    "practitioner_id": {
+                        "type": "integer"
+                    },
+                    "service_id": {
+                        "type": "integer"
+                    },
+                    "client_id": {
+                        "type": "integer"
+                    },
+                    "client_package_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "case_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "room_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "vehicle_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "repeating_rule": {
+                        "type": "object",
+                        "properties": {
+                            "frequency": {
+                                "$ref": "#/components/schemas/RepeatingRuleFrequency"
+                            },
+                            "interval": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 4
+                            },
+                            "days": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "mon",
+                                        "tue",
+                                        "wed",
+                                        "thu",
+                                        "fri",
+                                        "sat",
+                                        "sun"
+                                    ]
+                                }
+                            },
+                            "occurrences": {
+                                "type": "integer",
+                                "maximum": 100
+                            },
+                            "skip_conflicts": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "resource_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "location_id",
+                    "practitioner_id",
+                    "service_id",
+                    "client_id",
+                    "starts_at",
+                    "ends_at"
+                ],
+                "title": "StoreAppointmentRequest"
+            },
+            "StoreClientRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "preferred_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "profession": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "email": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "email"
+                    },
+                    "date_of_birth": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "sex": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "gender_identity": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "pronouns": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "privacy_policy_consent": {
+                        "$ref": "#/components/schemas/PrivacyPolicyConsent"
+                    },
+                    "emergency_contact_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "emergency_contact_phone": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "emergency_contact_relationship": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "notes": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "alert": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 500
+                    },
+                    "referral_type_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "referral_description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "referred_by_id": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "intolerances": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "address": {
+                        "type": "object",
+                        "properties": {
+                            "line1": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "line2": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "city": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "state": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "postal_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "medications": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "dosage": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "allergies": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "reaction": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "number": {
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "enum": [
+                                        "mobile",
+                                        "home",
+                                        "work",
+                                        "other"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "number",
+                                "code"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "first_name",
+                    "last_name"
+                ],
+                "title": "StoreClientRequest"
+            },
+            "UpdateAppointmentRequest": {
+                "type": "object",
+                "properties": {
+                    "location_id": {
+                        "type": "integer"
+                    },
+                    "practitioner_id": {
+                        "type": "integer"
+                    },
+                    "service_id": {
+                        "type": "integer"
+                    },
+                    "client_id": {
+                        "type": "integer"
+                    },
+                    "client_package_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "case_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "confirmed": {
+                        "type": "boolean"
+                    },
+                    "room_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "vehicle_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "resource_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "title": "UpdateAppointmentRequest"
+            },
+            "UpdateClientRequest": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "preferred_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "profession": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "email": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "email"
+                    },
+                    "date_of_birth": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "sex": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "gender_identity": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "pronouns": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "privacy_policy_consent": {
+                        "$ref": "#/components/schemas/PrivacyPolicyConsent"
+                    },
+                    "emergency_contact_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "emergency_contact_phone": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "emergency_contact_relationship": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "notes": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "alert": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 500
+                    },
+                    "referral_type_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "referral_description": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "referred_by_id": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "intolerances": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "address": {
+                        "type": "object",
+                        "properties": {
+                            "line1": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "line2": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "city": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "state": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "postal_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            }
+                        }
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "ndis_details": {
+                        "type": "object",
+                        "properties": {
+                            "ndis_number": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "fund_management": {
+                                "$ref": "#/components/schemas/NdisFundManagement"
+                            }
+                        }
+                    },
+                    "medications": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "dosage": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "allergies": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "reaction": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "phone_numbers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "number": {
+                                    "type": "string"
+                                },
+                                "code": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "enum": [
+                                        "mobile",
+                                        "home",
+                                        "work",
+                                        "other"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "number",
+                                "code"
+                            ]
+                        }
+                    }
+                },
+                "title": "UpdateClientRequest"
+            }
+        },
+        "responses": {
+            "ValidationException": {
+                "description": "Validation error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Errors overview."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "description": "A detailed description of each field that failed validation.",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "errors"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthenticationException": {
+                "description": "Unauthenticated",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "ModelNotFoundException": {
+                "description": "Not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthorizationException": {
+                "description": "Authorization error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
     }
-  }
 }

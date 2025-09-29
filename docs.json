@@ -2,6 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "maple",
   "name": "Caspen API docs",
+  "api": {
+    "playground": {
+      "display": "simple"
+    }
+  },
   "colors": {
     "primary": "#4338CA",
     "light": "#818cf8",
@@ -37,6 +42,30 @@
         ]
       },
       {
+        "group": "Appointments",
+        "pages": [
+          "api-reference/appointments/object",
+          "api-reference/appointments/list",
+          "api-reference/appointments/create",
+          "api-reference/appointments/retrieve",
+          "api-reference/appointments/update"
+        ]
+      },
+      {
+        "group": "Availabilities",
+        "pages": [
+          "api-reference/availabilities/object",
+          "api-reference/availabilities/list"
+        ]
+      },
+      {
+        "group": "Availability Slots",
+        "pages": [
+          "api-reference/availability-slots/object",
+          "api-reference/availability-slots/list"
+        ]
+      },
+      {
         "group": "Clients",
         "pages": [
           "api-reference/clients/object",
@@ -44,6 +73,38 @@
           "api-reference/clients/create",
           "api-reference/clients/retrieve",
           "api-reference/clients/update"
+        ]
+      },
+      {
+        "group": "Contacts",
+        "pages": [
+          "api-reference/contacts/object",
+          "api-reference/contacts/list",
+          "api-reference/contacts/retrieve"
+        ]
+      },
+      {
+        "group": "Locations",
+        "pages": [
+          "api-reference/locations/object",
+          "api-reference/locations/list",
+          "api-reference/locations/retrieve"
+        ]
+      },
+      {
+        "group": "Practitioners",
+        "pages": [
+          "api-reference/practitioners/object",
+          "api-reference/practitioners/list",
+          "api-reference/practitioners/retrieve"
+        ]
+      },
+      {
+        "group": "Services",
+        "pages": [
+          "api-reference/services/object",
+          "api-reference/services/list",
+          "api-reference/services/retrieve"
         ]
       }
     ]
