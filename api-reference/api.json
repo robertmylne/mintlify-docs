@@ -224,7 +224,7 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -232,7 +232,7 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -286,7 +286,7 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -294,7 +294,7 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -302,7 +302,7 @@
                         "in": "query",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     },
                     {
@@ -1034,6 +1034,30 @@
                             "null"
                         ]
                     },
+                    "latitude": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "longitude": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "formatted_address": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "place_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
                     "created_at": {
                         "type": [
                             "string",
@@ -1062,11 +1086,164 @@
                     "postal_code",
                     "country_code",
                     "country",
+                    "latitude",
+                    "longitude",
+                    "formatted_address",
+                    "place_id",
                     "created_at",
                     "updated_at",
                     "formatted"
                 ],
                 "title": "Address"
+            },
+            "AppointmentClientResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The appointment client's unique identifier.",
+                        "examples": [
+                            "apc_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "appointment_id": {
+                        "type": "string",
+                        "description": "The appointment identifier.",
+                        "examples": [
+                            "apt_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "client_id": {
+                        "type": "string",
+                        "description": "The client identifier.",
+                        "examples": [
+                            "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "case_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The case identifier for this client's booking.",
+                        "examples": [
+                            "cas_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "client_package_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The client package identifier if this booking uses a package.",
+                        "examples": [
+                            "cpk_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "status": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The attendance status of the client.",
+                        "examples": [
+                            "attended"
+                        ]
+                    },
+                    "do_not_invoice": {
+                        "type": "boolean",
+                        "description": "Whether this client should not be invoiced for this appointment.",
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Notes specific to this client's appointment.",
+                        "examples": [
+                            "Client requested extra time"
+                        ]
+                    },
+                    "confirmed": {
+                        "type": "boolean",
+                        "description": "Whether the client has confirmed their attendance.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "confirmed_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "When the client confirmed their attendance (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    },
+                    "cancellation_reason_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The cancellation reason identifier if cancelled.",
+                        "examples": [
+                            "cnr_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "cancellation_note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Additional notes about the cancellation.",
+                        "examples": [
+                            "Client called to cancel"
+                        ]
+                    },
+                    "cancelled_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "When this client's appointment was cancelled (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "description": "The appointment start time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T09:00:00Z"
+                        ]
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "description": "The appointment end time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T10:00:00Z"
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when this record was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "description": "The timestamp when this record was last updated (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "AppointmentClientResource"
             },
             "AppointmentCollection": {
                 "type": "array",
@@ -1106,32 +1283,40 @@
                             "ser_01HQFQ9QWTNNPY58FZ8CB3FWWK"
                         ]
                     },
-                    "client_id": {
+                    "service_price": {
+                        "type": "integer",
+                        "description": "The snapshotted base price from the service at time of booking.",
+                        "examples": [
+                            12000
+                        ]
+                    },
+                    "price": {
+                        "type": "integer",
+                        "description": "The calculated total price (service_price \u00d7 client count if price_per_client).",
+                        "examples": [
+                            24000
+                        ]
+                    },
+                    "price_unit": {
                         "type": "string",
-                        "description": "The client identifier who has the appointment.",
+                        "description": "The snapshotted price unit from the service at time of booking.",
                         "examples": [
-                            "cli_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                            "hourly"
                         ]
                     },
-                    "client_package_id": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "The client package identifier if this appointment uses a package.",
+                    "price_per_client": {
+                        "type": "boolean",
+                        "description": "Whether the price is per client (true) or per appointment (false).",
                         "examples": [
-                            "cpk_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                            false
                         ]
                     },
-                    "case_id": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "The case identifier if this appointment is part of a case.",
-                        "examples": [
-                            "cas_01HQFQ9QWTNNPY58FZ8CB3FWWK"
-                        ]
+                    "appointment_clients": {
+                        "type": "array",
+                        "description": "The appointment clients (when loaded).",
+                        "items": {
+                            "$ref": "#/components/schemas/AppointmentClientResource"
+                        }
                     },
                     "starts_at": {
                         "type": "string",
@@ -1159,26 +1344,6 @@
                         "description": "The appointment status.",
                         "examples": [
                             "pending"
-                        ]
-                    },
-                    "confirmed": {
-                        "type": [
-                            "boolean",
-                            "null"
-                        ],
-                        "description": "Whether the appointment is confirmed.",
-                        "examples": [
-                            true
-                        ]
-                    },
-                    "confirmed_at": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "When the appointment was confirmed (ISO 8601).",
-                        "examples": [
-                            "2024-01-01T09:30:00Z"
                         ]
                     },
                     "room_id": {
@@ -1985,6 +2150,19 @@
                             }
                         }
                     },
+                    "tag_ids": {
+                        "type": "array",
+                        "description": "The IDs of tags attached to the contact.",
+                        "examples": [
+                            [
+                                "tag_01HYHYQHA682J0K1RW7B2HVA9F",
+                                "tag_01HYHYW37MTYJPMT5JV4RN99GK"
+                            ]
+                        ],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
                     "created_at": {
                         "type": "string",
                         "description": "The timestamp when the contact was created (ISO 8601).",
@@ -2063,12 +2241,22 @@
                             "AU"
                         ]
                     },
-                    "online_booking": {
+                    "online_appointment_booking": {
                         "type": [
                             "boolean",
                             "null"
                         ],
-                        "description": "Whether online booking is enabled for this location.",
+                        "description": "Whether online appointment booking is enabled for this location.",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "online_class_booking": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Whether online class booking is enabled for this location.",
                         "examples": [
                             true
                         ]
@@ -2349,15 +2537,6 @@
                 },
                 "title": "LocationResource"
             },
-            "NdisFundManagement": {
-                "type": "string",
-                "enum": [
-                    "self_managed",
-                    "plan_managed",
-                    "ndia_managed"
-                ],
-                "title": "NdisFundManagement"
-            },
             "OpeningHour": {
                 "type": "object",
                 "properties": {
@@ -2530,12 +2709,12 @@
                             "pra_01HQFQ9QWTNNPY58FZ8CB3FWWK"
                         ]
                     },
-                    "online_booking": {
+                    "online_appointment_booking": {
                         "type": [
                             "boolean",
                             "null"
                         ],
-                        "description": "Whether online booking is enabled for this practitioner.",
+                        "description": "Whether online appointment booking is enabled for this practitioner.",
                         "examples": [
                             true
                         ]
@@ -2607,14 +2786,6 @@
                 },
                 "title": "PractitionerResource"
             },
-            "PrivacyPolicyConsent": {
-                "type": "string",
-                "enum": [
-                    "accepted",
-                    "rejected"
-                ],
-                "title": "PrivacyPolicyConsent"
-            },
             "ProviderNumber": {
                 "type": "object",
                 "properties": {
@@ -2667,13 +2838,6 @@
                 ],
                 "title": "RepeatInterval"
             },
-            "RepeatingRuleFrequency": {
-                "type": "string",
-                "enum": [
-                    "weekly"
-                ],
-                "title": "RepeatingRuleFrequency"
-            },
             "ServiceCollection": {
                 "type": "array",
                 "items": {
@@ -2696,16 +2860,6 @@
                         "description": "The service category identifier.",
                         "examples": [
                             "cat_01HQFQ9QWTNNPY58FZ8CB3FWWK"
-                        ]
-                    },
-                    "progress_note_template_id": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "The progress note template identifier.",
-                        "examples": [
-                            "pnt_01HQFQ9QWTNNPY58FZ8CB3FWWK"
                         ]
                     },
                     "appointment_notification_set_id": {
@@ -2784,12 +2938,19 @@
                         "type": "string",
                         "description": "The service price unit.",
                         "examples": [
-                            "per_session"
+                            "hourly"
                         ]
                     },
-                    "online_booking": {
+                    "price_per_client": {
                         "type": "boolean",
-                        "description": "Whether online booking is enabled for this service.",
+                        "description": "Whether the price is per client (true) or per appointment (false).",
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "online_appointment_booking": {
+                        "type": "boolean",
+                        "description": "Whether online appointment booking is enabled for this service.",
                         "examples": [
                             true
                         ]
@@ -2855,21 +3016,6 @@
                     "service_id": {
                         "type": "integer"
                     },
-                    "client_id": {
-                        "type": "integer"
-                    },
-                    "client_package_id": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
-                    },
-                    "case_id": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
-                    },
                     "starts_at": {
                         "type": "string",
                         "format": "date-time"
@@ -2877,6 +3023,16 @@
                     "ends_at": {
                         "type": "string",
                         "format": "date-time"
+                    },
+                    "buffer_before_duration": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
+                    },
+                    "buffer_after_duration": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 120
                     },
                     "note": {
                         "type": [
@@ -2897,11 +3053,22 @@
                             "null"
                         ]
                     },
+                    "client_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "minItems": 1
+                    },
                     "repeating_rule": {
                         "type": "object",
+                        "description": "TODO: If client_package_id is ever re-added to appointments, block repeating rules when packages are applied.",
                         "properties": {
                             "frequency": {
-                                "$ref": "#/components/schemas/RepeatingRuleFrequency"
+                                "type": "string",
+                                "enum": [
+                                    "weekly"
+                                ]
                             },
                             "interval": {
                                 "type": "integer",
@@ -2933,7 +3100,10 @@
                         }
                     },
                     "resource_ids": {
-                        "type": "array",
+                        "type": [
+                            "array",
+                            "null"
+                        ],
                         "items": {
                             "type": "integer"
                         }
@@ -2943,9 +3113,9 @@
                     "location_id",
                     "practitioner_id",
                     "service_id",
-                    "client_id",
                     "starts_at",
-                    "ends_at"
+                    "ends_at",
+                    "client_ids"
                 ],
                 "title": "StoreAppointmentRequest"
             },
@@ -3009,7 +3179,14 @@
                         ]
                     },
                     "privacy_policy_consent": {
-                        "$ref": "#/components/schemas/PrivacyPolicyConsent"
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "accepted",
+                            "rejected"
+                        ]
                     },
                     "emergency_contact_name": {
                         "type": [
@@ -3106,6 +3283,35 @@
                                 ]
                             },
                             "country_code": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
+                            },
+                            "latitude": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "minimum": -90,
+                                "maximum": 90
+                            },
+                            "longitude": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "minimum": -180,
+                                "maximum": 180
+                            },
+                            "formatted_address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "maxLength": 500
+                            },
+                            "place_id": {
                                 "type": [
                                     "string",
                                     "null"
@@ -3208,21 +3414,6 @@
                     "service_id": {
                         "type": "integer"
                     },
-                    "client_id": {
-                        "type": "integer"
-                    },
-                    "client_package_id": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
-                    },
-                    "case_id": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ]
-                    },
                     "starts_at": {
                         "type": "string",
                         "format": "date-time"
@@ -3231,15 +3422,26 @@
                         "type": "string",
                         "format": "date-time"
                     },
+                    "buffer_before_duration": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0
+                    },
+                    "buffer_after_duration": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0
+                    },
                     "note": {
                         "type": [
                             "string",
                             "null"
                         ],
                         "maxLength": 255
-                    },
-                    "confirmed": {
-                        "type": "boolean"
                     },
                     "room_id": {
                         "type": [
@@ -3254,7 +3456,10 @@
                         ]
                     },
                     "resource_ids": {
-                        "type": "array",
+                        "type": [
+                            "array",
+                            "null"
+                        ],
                         "items": {
                             "type": "integer"
                         }
@@ -3322,7 +3527,14 @@
                         ]
                     },
                     "privacy_policy_consent": {
-                        "$ref": "#/components/schemas/PrivacyPolicyConsent"
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "accepted",
+                            "rejected"
+                        ]
                     },
                     "emergency_contact_name": {
                         "type": [
@@ -3423,6 +3635,35 @@
                                     "string",
                                     "null"
                                 ]
+                            },
+                            "latitude": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "minimum": -90,
+                                "maximum": 90
+                            },
+                            "longitude": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ],
+                                "minimum": -180,
+                                "maximum": 180
+                            },
+                            "formatted_address": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "maxLength": 500
+                            },
+                            "place_id": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ]
                             }
                         }
                     },
@@ -3442,7 +3683,15 @@
                                 ]
                             },
                             "fund_management": {
-                                "$ref": "#/components/schemas/NdisFundManagement"
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "enum": [
+                                    "self_managed",
+                                    "plan_managed",
+                                    "ndia_managed"
+                                ]
                             }
                         }
                     },
