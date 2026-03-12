@@ -1761,24 +1761,14 @@
                             "type": "string"
                         }
                     },
-                    "emergency_contact_name": {
+                    "emergency_contact_id": {
                         "type": [
                             "string",
                             "null"
                         ],
-                        "description": "The client's emergency contact name.",
+                        "description": "The contact identifier for the emergency contact.",
                         "examples": [
-                            "Anne Sullivan"
-                        ]
-                    },
-                    "emergency_contact_phone": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "The client's emergency contact phone number.",
-                        "examples": [
-                            "+61401111222"
+                            "con_01HQFQ9QWTNNPY58FZ8CB3FWWK"
                         ]
                     },
                     "emergency_contact_relationship": {
@@ -2232,13 +2222,6 @@
                         "description": "The location's timezone.",
                         "examples": [
                             "Australia/Sydney"
-                        ]
-                    },
-                    "country_code": {
-                        "type": "string",
-                        "description": "The location's country code.",
-                        "examples": [
-                            "AU"
                         ]
                     },
                     "online_appointment_booking": {
@@ -3062,7 +3045,6 @@
                     },
                     "repeating_rule": {
                         "type": "object",
-                        "description": "TODO: If client_package_id is ever re-added to appointments, block repeating rules when packages are applied.",
                         "properties": {
                             "frequency": {
                                 "type": "string",
@@ -3188,15 +3170,9 @@
                             "rejected"
                         ]
                     },
-                    "emergency_contact_name": {
+                    "emergency_contact_id": {
                         "type": [
-                            "string",
-                            "null"
-                        ]
-                    },
-                    "emergency_contact_phone": {
-                        "type": [
-                            "string",
+                            "integer",
                             "null"
                         ]
                     },
@@ -3536,15 +3512,9 @@
                             "rejected"
                         ]
                     },
-                    "emergency_contact_name": {
+                    "emergency_contact_id": {
                         "type": [
-                            "string",
-                            "null"
-                        ]
-                    },
-                    "emergency_contact_phone": {
-                        "type": [
-                            "string",
+                            "integer",
                             "null"
                         ]
                     },
