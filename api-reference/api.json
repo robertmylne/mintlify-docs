@@ -335,6 +335,259 @@
                 }
             }
         },
+        "/busy_times": {
+            "get": {
+                "operationId": "busyTime.index",
+                "tags": [
+                    "BusyTime"
+                ],
+                "parameters": [
+                    {
+                        "name": "cursor",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated set of `BusyTimeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/BusyTimeCollection"
+                                        },
+                                        "links": {
+                                            "type": "object",
+                                            "properties": {
+                                                "prev": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                },
+                                                "next": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "prev",
+                                                "next"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data",
+                                        "links"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "busyTime.store",
+                "tags": [
+                    "BusyTime"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreBusyTimeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`BusyTimeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusyTimeResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                }
+            }
+        },
+        "/busy_times/{busyTime}": {
+            "get": {
+                "operationId": "busyTime.show",
+                "tags": [
+                    "BusyTime"
+                ],
+                "parameters": [
+                    {
+                        "name": "busyTime",
+                        "in": "path",
+                        "required": true,
+                        "description": "The busy time ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "`BusyTimeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusyTimeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "busyTime.update",
+                "tags": [
+                    "BusyTime"
+                ],
+                "parameters": [
+                    {
+                        "name": "busyTime",
+                        "in": "path",
+                        "required": true,
+                        "description": "The busy time ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBusyTimeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`BusyTimeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusyTimeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            }
+        },
+        "/busy_times/{busyTime}/archive": {
+            "post": {
+                "operationId": "busyTime.archive",
+                "tags": [
+                    "BusyTime"
+                ],
+                "parameters": [
+                    {
+                        "name": "busyTime",
+                        "in": "path",
+                        "required": true,
+                        "description": "The busy time ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ArchiveBusyTimeRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "`BusyTimeResource`",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BusyTimeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/AuthorizationException"
+                    }
+                }
+            }
+        },
         "/clients": {
             "get": {
                 "operationId": "client.index",
@@ -1046,7 +1299,7 @@
                             "null"
                         ]
                     },
-                    "formatted_address": {
+                    "formatted_address_google_estimate": {
                         "type": [
                             "string",
                             "null"
@@ -1074,6 +1327,9 @@
                     },
                     "formatted": {
                         "type": "string"
+                    },
+                    "formatted_multiline": {
+                        "type": "string"
                     }
                 },
                 "required": [
@@ -1088,11 +1344,12 @@
                     "country",
                     "latitude",
                     "longitude",
-                    "formatted_address",
+                    "formatted_address_google_estimate",
                     "place_id",
                     "created_at",
                     "updated_at",
-                    "formatted"
+                    "formatted",
+                    "formatted_multiline"
                 ],
                 "title": "Address"
             },
@@ -1429,6 +1686,21 @@
                 },
                 "title": "AppointmentResource"
             },
+            "ArchiveBusyTimeRequest": {
+                "type": "object",
+                "properties": {
+                    "also_archive": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "future"
+                        ]
+                    }
+                },
+                "title": "ArchiveBusyTimeRequest"
+            },
             "AvailabilityCollection": {
                 "type": "object",
                 "properties": {
@@ -1581,6 +1853,88 @@
                     }
                 },
                 "title": "AvailabilitySlotResource"
+            },
+            "BusyTimeCollection": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/BusyTimeResource"
+                },
+                "title": "BusyTimeCollection"
+            },
+            "BusyTimeResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "The busy time's unique identifier.",
+                        "examples": [
+                            "bti_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "location_id": {
+                        "type": "string",
+                        "description": "The location identifier where the busy time takes place.",
+                        "examples": [
+                            "loc_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "practitioner_id": {
+                        "type": "string",
+                        "description": "The practitioner identifier assigned to the busy time.",
+                        "examples": [
+                            "pra_01HQFQ9QWTNNPY58FZ8CB3FWWK"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "description": "The busy time start time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T10:00:00Z"
+                        ]
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "description": "The busy time end time (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T11:00:00Z"
+                        ]
+                    },
+                    "duration": {
+                        "type": "integer",
+                        "description": "The busy time duration in minutes.",
+                        "examples": [
+                            60
+                        ]
+                    },
+                    "name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The busy time name.",
+                        "examples": [
+                            "Lunch break"
+                        ]
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "The busy time note.",
+                        "examples": [
+                            "Practitioner unavailable for personal appointment."
+                        ]
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "description": "The timestamp when the busy time was created (ISO 8601).",
+                        "examples": [
+                            "2024-01-01T12:00:00Z"
+                        ]
+                    }
+                },
+                "title": "BusyTimeResource"
             },
             "ClientCollection": {
                 "type": "array",
@@ -2244,14 +2598,21 @@
                             true
                         ]
                     },
-                    "abn": {
+                    "tax_identifier": {
                         "type": [
                             "string",
                             "null"
                         ],
-                        "description": "The location's Australian Business Number.",
+                        "description": "The location's tax identifier (e.g. ABN, VAT number, GST number, Tax number).",
                         "examples": [
                             "12 345 678 901"
+                        ]
+                    },
+                    "tax_identifier_label": {
+                        "type": "string",
+                        "description": "The label for the tax identifier based on the account's country.",
+                        "examples": [
+                            "ABN"
                         ]
                     },
                     "ndis_number": {
@@ -3101,6 +3462,110 @@
                 ],
                 "title": "StoreAppointmentRequest"
             },
+            "StoreBusyTimeRequest": {
+                "type": "object",
+                "properties": {
+                    "location_id": {
+                        "type": "integer"
+                    },
+                    "practitioner_id": {
+                        "type": "integer"
+                    },
+                    "busy_time_type_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "room_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "vehicle_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "repeating_rule": {
+                        "type": "object",
+                        "properties": {
+                            "frequency": {
+                                "type": "string",
+                                "enum": [
+                                    "weekly"
+                                ]
+                            },
+                            "interval": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 4
+                            },
+                            "days": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "enum": [
+                                        "mon",
+                                        "tue",
+                                        "wed",
+                                        "thu",
+                                        "fri",
+                                        "sat",
+                                        "sun"
+                                    ]
+                                }
+                            },
+                            "occurrences": {
+                                "type": "integer",
+                                "maximum": 100
+                            },
+                            "skip_conflicts": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "resource_ids": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "required": [
+                    "location_id",
+                    "practitioner_id",
+                    "starts_at",
+                    "ends_at"
+                ],
+                "title": "StoreBusyTimeRequest"
+            },
             "StoreClientRequest": {
                 "type": "object",
                 "properties": {
@@ -3280,7 +3745,7 @@
                                 "minimum": -180,
                                 "maximum": 180
                             },
-                            "formatted_address": {
+                            "formatted_address_google_estimate": {
                                 "type": [
                                     "string",
                                     "null"
@@ -3442,6 +3907,66 @@
                     }
                 },
                 "title": "UpdateAppointmentRequest"
+            },
+            "UpdateBusyTimeRequest": {
+                "type": "object",
+                "properties": {
+                    "location_id": {
+                        "type": "integer"
+                    },
+                    "practitioner_id": {
+                        "type": "integer"
+                    },
+                    "busy_time_type_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "starts_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "note": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 255
+                    },
+                    "room_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "vehicle_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ]
+                    },
+                    "resource_ids": {
+                        "type": [
+                            "array",
+                            "null"
+                        ],
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "title": "UpdateBusyTimeRequest"
             },
             "UpdateClientRequest": {
                 "type": "object",
@@ -3622,7 +4147,7 @@
                                 "minimum": -180,
                                 "maximum": 180
                             },
-                            "formatted_address": {
+                            "formatted_address_google_estimate": {
                                 "type": [
                                     "string",
                                     "null"
