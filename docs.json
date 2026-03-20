@@ -66,6 +66,17 @@
         ]
       },
       {
+        "group": "Busy Times",
+        "pages": [
+          "api-reference/busy-times/object",
+          "api-reference/busy-times/list",
+          "api-reference/busy-times/create",
+          "api-reference/busy-times/retrieve",
+          "api-reference/busy-times/update",
+          "api-reference/busy-times/archive"
+        ]
+      },
+      {
         "group": "Clients",
         "pages": [
           "api-reference/clients/object",
